@@ -54,11 +54,12 @@ func init() {
 	flag.Parse()
 }
 
-func main() {
-	f, err := os.Open(config)
+func readConfig(file string) []route {
+	f, err := os.Open(file)
 	if err != nil {
 		log.Fatalf("Unable to open file: %s", err)
 	}
+	defer f.Close()
 
 	var routes []route
 
@@ -81,6 +82,14 @@ func main() {
 		}
 	}
 
+	return routes
+}
+
+func main() {
+	routes := readConfig(config)
+	if len(routes) == 0 {
+		log.Fatalln("No routes, refusing to start")
+	}
 	for _, r := range routes {
 		go r.listen()
 	}
