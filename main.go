@@ -72,6 +72,8 @@ func readConfig(file string) []route {
 			log.Fatalf("Error reading file: %s", err)
 		}
 
+		line = strings.TrimSpace(line)
+
 		if line[0] == '#' {
 			continue
 		}
