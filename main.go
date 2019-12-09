@@ -18,11 +18,15 @@ type route struct {
 }
 
 func (r route) handle(src net.Conn) {
+	defer src.Close()
+
 	dst, err := net.Dial("tcp", r.dest)
 	if err != nil {
 		log.Printf("Error connecting to destination: %s\n", r.dest)
 		return
 	}
+
+	defer dst.Close()
 
 	log.Printf("Routing %s -> %s", r.src, r.dest)
 
